@@ -1,0 +1,14 @@
+[package]
+name = "macro-bug"
+version = "0.1.0"
+authors = ["milan"]
+edition = "2018"
+
+[features]
+default = []
+manual = []
+
+[dependencies]
+failure = "*"
+actix = "*"
+futures = "*"
