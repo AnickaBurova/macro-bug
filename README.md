@@ -1,9 +1,9 @@
-# Show a potential bug in macros in rust lang
+# Problem with generating code and using block inside functions
 
 Files [macro.rs](https://github.com/AnickaBurova/macro-bug/blob/master/macro.rs) and [manual.rs](https://github.com/AnickaBurova/macro-bug/blob/master/manual.rs) are nearly identical, tho the macro.rs is failing with two errors.
 
 The difference is the code which is failing to compile is generated using a macro.
-``` bash
+```bash
 >>diff macro.rs manual.rs
 178c178
 <     #[cfg(feature = "manual")]
@@ -14,10 +14,12 @@ The difference is the code which is failing to compile is generated using a macr
 
 Those two files were generated using [cargo-expand](https://github.com/dtolnay/cargo-expand)
 
-EDIT:
+## Resolution
+
 So this is not a bug, but hygiene feature of macros, the self should not leak in to the "code" block. I solved by making the code block lambda function and calling the function with all the necessary parameters. Compiler should be able to optimise the call out by inlining the code.
 
-___```rust
+
+```rust
     get_message!(CreateLight, Light: LightImpl, index: u8, name: String,
                  -> Lighting, create_light,
                  -> LightingImpl => {
